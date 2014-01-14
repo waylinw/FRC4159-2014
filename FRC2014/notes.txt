@@ -1,0 +1,4 @@
+minimum up output: -0.4 -> -100
+minimum down output: 0.2 -> 80
+maximum up output: -1.0 -> 2777
+maximum down output: 1.0 -> 4310
