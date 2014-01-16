@@ -17,7 +17,7 @@
   <min_threshold>150</min_threshold>
 </Adaptive_Threshold>
 <Blob_Filter>
-  <create_blob_array_variable>FALSE</create_blob_array_variable>
+  <create_blob_array_variable>TRUE</create_blob_array_variable>
   <filters>
     <tab>
       <filter>
@@ -31,20 +31,20 @@
       <filter:2>
         <count_threshold>0</count_threshold>
         <create_array>0</create_array>
-        <filter_id>63</filter_id>
+        <filter_id>8</filter_id>
         <invert_count>0</invert_count>
         <invert_threshold>0</invert_threshold>
-        <ratio>5.87500</ratio>
-        <weight_threshold>.7</weight_threshold>
+        <minimum_size>250</minimum_size>
+        <weight_threshold>.80</weight_threshold>
       </filter:2>
       <filter:3>
         <count_threshold>0</count_threshold>
         <create_array>0</create_array>
-        <filter_id>8</filter_id>
+        <filter_id>63</filter_id>
         <invert_count>0</invert_count>
         <invert_threshold>0</invert_threshold>
-        <minimum_size>200</minimum_size>
-        <weight_threshold>.80</weight_threshold>
+        <ratio>5.87500</ratio>
+        <weight_threshold>.6</weight_threshold>
       </filter:3>
       <filter:4>
         <count_threshold>0</count_threshold>
@@ -55,16 +55,50 @@
         <weight_threshold>0</weight_threshold>
       </filter:4>
       <filter:5>
-        <count_threshold>0</count_threshold>
+        <count_threshold>1</count_threshold>
         <create_array>0</create_array>
-        <filter_id>77</filter_id>
-        <image>Source</image>
+        <filter_id>22</filter_id>
         <invert_count>0</invert_count>
         <invert_threshold>0</invert_threshold>
-        <weight_threshold>.35</weight_threshold>
+        <weight_threshold>.5</weight_threshold>
       </filter:5>
+      <filter:6>
+        <count_threshold>0</count_threshold>
+        <create_array>0</create_array>
+        <filter_id>98</filter_id>
+        <invert_count>0</invert_count>
+        <invert_threshold>0</invert_threshold>
+        <object>1</object>
+        <weight_threshold>0</weight_threshold>
+      </filter:6>
     </tab>
-    <tab:2/>
+    <tab:2>
+      <filter>
+        <count_threshold>0</count_threshold>
+        <create_array>0</create_array>
+        <filter_id>20</filter_id>
+        <invert_count>0</invert_count>
+        <invert_threshold>0</invert_threshold>
+        <weight_threshold>.8</weight_threshold>
+      </filter>
+      <filter:2>
+        <count_threshold>0</count_threshold>
+        <create_array>0</create_array>
+        <filter_id>8</filter_id>
+        <invert_count>0</invert_count>
+        <invert_threshold>0</invert_threshold>
+        <minimum_size>250</minimum_size>
+        <weight_threshold>0</weight_threshold>
+      </filter:2>
+      <filter:3>
+        <count_threshold>0</count_threshold>
+        <create_array>0</create_array>
+        <filter_id>28</filter_id>
+        <invert_count>0</invert_count>
+        <invert_threshold>0</invert_threshold>
+        <weight_threshold>.6</weight_threshold>
+      </filter:3>
+    </tab:2>
     <tab:3/>
     <tab:4/>
     <tab:5/>
@@ -73,7 +107,7 @@
   <largest_is_background>FALSE</largest_is_background>
   <name>quadrilateral</name>
   <show_weights>TRUE</show_weights>
-  <sort_array_on_x>FALSE</sort_array_on_x>
+  <sort_array_on_x>TRUE</sort_array_on_x>
   <sort_array_on_y>FALSE</sort_array_on_y>
 </Blob_Filter>
 <Fill>
@@ -90,68 +124,70 @@
   <thickness>1</thickness>
 </Blob_Replace>
 <VBScript_Program>
-  <script>list = GetArrayVariable("BFR_COORDINATES")
+  <script>list = GetArrayVariable("BFR_COORDINATES")
+    
+imageHeight = GetVariable("IMAGE_HEIGHT")
+imageWidth = GetVariable("IMAGE_WIDTH")
+centerX = imageWidth / 2
+cameraFieldOfView = 50
+targetHeight = 68.0
+
+	
+' if list detects &gt;1 target
 if isArray(list) then
   if ubound(list) &gt; 0 then
-
-		targetPixelHeight = 0
-    targetSamples = 0
-
-    ' calibrated for an Axis camera
-    imageHeight = GetVariable("IMAGE_HEIGHT")
-    imageWidth = GetVariable("IMAGE_WIDTH")
-		centerX = imageWidth / 2
-  	'cameraFieldOfView = 47.5
-	  'targetHeight = 18.0
-	
-		cameraFieldOfView = 54.0
-		targetHeight = 68.0
-		topy = 0
-		angleTo = 0
-
-    for i = 0 to ubound(list) step 8
-      ' grab list of coordinates from blob_replace
-	  	' note the array is sorted by previous module in a specific order
-      righty = list(i+1)
-      rightyy = list(i+7)
-      lefty = list(i+3)
-      leftyy = list(i+5)
-
-			if righty &gt; topy then
-			  topy = righty
-				angleTo = i
-			end if
-
-			' based on these two side lines get the center line height
-		  ' the center line is used since we want to aim to the center
-  		' of the target. This also removes any perspective distortion
-	  	' where the right or left size may be a couple inches closer
-		  ' or futher away from the camera
-  		targetPixelHeight = targetPixelHeight + ((lefty - leftyy) + (righty - rightyy)) / 2
-
-			targetSamples = targetSamples + 1
-
-    next
-
-		targetPixelHeight = targetPixelHeight / targetSamples
-
-    ' we can use a known distance to determine FOV if we don't know it
-	  ' measuredDistance = 10.0*12.0
- 	  ' write "Calculated FOV " &amp; (((atan((((targetHeight*imageHeight)/targetPixelHeight)/2)/measuredDistance)*2.0)*180.0)/3.14159) &amp; vbCRLF
-
-    ' determine distance in inches
-    totalDistance = (((targetHeight*imageHeight)/targetPixelHeight)/2)/tan(((cameraFieldOfView*3.14159)/180.0)/2.0)
-	
-		SetVariable "Distance", CLng((totalDistance*100)/12)/100
+	targetPixelHeightL = 0
 		
-		' since we know the FOV of the camera we can simply scale the total field
-		' of view into the pixel distance from center of screen to desired target
-		angleCenterX = (list(angleTo)+list(angleTo+2)+list(angleTo+4)+list(angleTo+6))/4
-		' we now know the center of the target X coordinate
-		angle = (cameraFieldOfView * (centerX - angleCenterX)) / imageWidth
+	angleToL = 0
 
-		SetVariable "Angle", CInt(angle*100)/100
+	righty = list(1)
+        rightyy = list(7)
+        lefty = list(3)
+        leftyy = list(5)
 
+  	targetPixelHeightL = targetPixelHeightL + ((lefty - leftyy) + (righty - rightyy)) / 2
+
+    	totalDistance = (((targetHeight*imageHeight)/targetPixelHeightL)/2)/tan(((cameraFieldOfView*3.14159)/180.0)/2.0)
+	
+		SetVariable "LeftDistance", CLng((totalDistance*100)/12)/100
+		
+    angleCenterXL = (list(0)+list(2)+list(4)+list(6))/4
+
+		FOVRad = cameraFieldOfView*3.14159/180
+
+		angleR = Atn((tan(FOVRad/2)*(angleCenterXL - centerX))/ (centerX))*180/3.14159
+		
+		SetVariable "LeftAngle", (angleR)
+	end if
+	
+	
+'right goal targeting
+
+  if ubound(list)&gt;7 then
+      targetPixelHeightR = 0
+
+      angleToR = 0
+
+      rightyy = list(9)
+      rightyyy = list(15)
+      leftyy = list(11)
+      leftyyy = list(13)
+			
+
+      targetPixelHeightR = targetPixelHeightR + ((leftyy - leftyyy) + (rightyy - rightyyy)) / 2
+
+      totalDistanceR = (((targetHeight*imageHeight)/targetPixelHeightR)/2)/tan(((cameraFieldOfView*3.14159)/180.0)/2.0)
+	
+		SetVariable "RightDistance", CLng((totalDistanceR*100)/12)/100
+		
+		angleCenterXR = (list(8)+list(10)+list(12)+list(14))/4
+		
+		FOVRad = cameraFieldOfView*3.14159/180
+
+		angleR = Atn(tan(FOVRad/2)*(angleCenterXR - centerX) / (centerX)) * 180 / 3.14159
+		
+		SetVariable "RightAngle", (angleR)
+		
 	end if
 end if
 </script>
@@ -174,8 +210,11 @@ end if
   <display_value_only>FALSE</display_value_only>
   <font_size>Normal (10pt)</font_size>
   <font_size_index>2</font_size_index>
-  <northwest>Distance
-Angle
+  <northeast>RightDistance
+RightAngle
+</northeast>
+  <northwest>LeftDistance
+LeftAngle
 </northwest>
 </Display_Variables>
 <Display_Point>
