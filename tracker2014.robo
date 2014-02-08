@@ -1,13 +1,29 @@
-<head><version>2.59.0</version></head>
+<head><version>2.61.0</version></head>
+<Axis_Internet_Camera>
+  <auto_back_light>FALSE</auto_back_light>
+  <auto_exposure>FALSE</auto_exposure>
+  <auto_white_balance>FALSE</auto_white_balance>
+  <brightness_value>10</brightness_value>
+  <color_level_value>50</color_level_value>
+  <contrast_value>50</contrast_value>
+  <exposure_value>10</exposure_value>
+  <ip_address>10.41.59.11</ip_address>
+  <is_active>TRUE</is_active>
+  <password>FRC</password>
+  <port>80</port>
+  <resolution>1</resolution>
+  <sharpness_value>50</sharpness_value>
+  <username>FRC</username>
+</Axis_Internet_Camera>
 <RGB_Channel>
   <channel>1</channel>
   <convert_to_grayscale>FALSE</convert_to_grayscale>
 </RGB_Channel>
 <RGB_Filter>
   <channel>2</channel>
-  <hue_value>230</hue_value>
+  <hue_value>100</hue_value>
   <hysteresis>0</hysteresis>
-  <min_value>210</min_value>
+  <min_value>100</min_value>
 </RGB_Filter>
 <Adaptive_Threshold>
   <channel_type>2</channel_type>
@@ -34,7 +50,7 @@
         <filter_id>8</filter_id>
         <invert_count>0</invert_count>
         <invert_threshold>0</invert_threshold>
-        <minimum_size>250</minimum_size>
+        <minimum_size>100</minimum_size>
         <weight_threshold>.80</weight_threshold>
       </filter:2>
       <filter:3>
@@ -87,16 +103,16 @@
         <filter_id>8</filter_id>
         <invert_count>0</invert_count>
         <invert_threshold>0</invert_threshold>
-        <minimum_size>250</minimum_size>
+        <minimum_size>100</minimum_size>
         <weight_threshold>0</weight_threshold>
       </filter:2>
       <filter:3>
-        <count_threshold>0</count_threshold>
+        <count_threshold>1</count_threshold>
         <create_array>0</create_array>
         <filter_id>28</filter_id>
         <invert_count>0</invert_count>
         <invert_threshold>0</invert_threshold>
-        <weight_threshold>.6</weight_threshold>
+        <weight_threshold>.3</weight_threshold>
       </filter:3>
     </tab:2>
     <tab:3/>
@@ -113,7 +129,7 @@
 <Fill>
   <check_border>FALSE</check_border>
   <fill_with_average_color>FALSE</fill_with_average_color>
-  <four_pixel_connectivity>FALSE</four_pixel_connectivity>
+  <four_pixel_connectivity>TRUE</four_pixel_connectivity>
 </Fill>
 <Blob_Replace>
   <color_index>3</color_index>
@@ -121,22 +137,22 @@
   <order_array_on_x>FALSE</order_array_on_x>
   <order_array_on_y>FALSE</order_array_on_y>
   <shape_index>15</shape_index>
-  <thickness>1</thickness>
+  <thickness>2</thickness>
 </Blob_Replace>
 <VBScript_Program>
-  <script>list = GetArrayVariable("BFR_COORDINATES")
+  <script>list = GetArrayVariable("BFR_COORDINATES")
     
 imageHeight = GetVariable("IMAGE_HEIGHT")
 imageWidth = GetVariable("IMAGE_WIDTH")
 centerX = imageWidth / 2
-cameraFieldOfView = 50
-targetHeight = 68.0
+cameraFieldOfView = 67
+targetHeight = 68.0
 
 	
 ' if list detects &gt;1 target
 if isArray(list) then
   if ubound(list) &gt; 0 then
-	targetPixelHeightL = 0
+	targetPixelHeightL = 0
 		
 	angleToL = 0
 
@@ -150,21 +166,21 @@ if isArray(list) then
     	totalDistance = (((targetHeight*imageHeight)/targetPixelHeightL)/2)/tan(((cameraFieldOfView*3.14159)/180.0)/2.0)
 	
 		SetVariable "LeftDistance", CLng((totalDistance*100)/12)/100
-		
+		
     angleCenterXL = (list(0)+list(2)+list(4)+list(6))/4
 
 		FOVRad = cameraFieldOfView*3.14159/180
 
-		angleR = Atn((tan(FOVRad/2)*(angleCenterXL - centerX))/ (centerX))*180/3.14159
+		angleR = Atn((tan(FOVRad/2)*(angleCenterXL - centerX))/ (centerX))*180/3.14159
 		
 		SetVariable "LeftAngle", (angleR)
-	end if
-	
+	end if
+	
 	
 'right goal targeting
 
   if ubound(list)&gt;7 then
-      targetPixelHeightR = 0
+      targetPixelHeightR = 0
 
       angleToR = 0
 
@@ -178,15 +194,15 @@ if isArray(list) then
 
       totalDistanceR = (((targetHeight*imageHeight)/targetPixelHeightR)/2)/tan(((cameraFieldOfView*3.14159)/180.0)/2.0)
 	
-		SetVariable "RightDistance", CLng((totalDistanceR*100)/12)/100
-		
-		angleCenterXR = (list(8)+list(10)+list(12)+list(14))/4
-		
+		SetVariable "RightDistance", CLng((totalDistanceR*100)/12)/100
+		
+		angleCenterXR = (list(8)+list(10)+list(12)+list(14))/4
+		
 		FOVRad = cameraFieldOfView*3.14159/180
-
+
 		angleR = Atn(tan(FOVRad/2)*(angleCenterXR - centerX) / (centerX)) * 180 / 3.14159
 		
-		SetVariable "RightAngle", (angleR)
+		SetVariable "RightAngle", (angleR)
 		
 	end if
 end if
@@ -219,14 +235,12 @@ LeftAngle
 </Display_Variables>
 <Display_Point>
   <clear_image>FALSE</clear_image>
-  <color_index>6</color_index>
   <data_source>2</data_source>
   <display_as_annotation>FALSE</display_as_annotation>
   <shape_color>red</shape_color>
   <shape_index>4</shape_index>
-  <shape_size>1</shape_size>
-  <size_index>2</size_index>
+  <shape_size>2</shape_size>
   <thickness>1</thickness>
-  <x_coord>320</x_coord>
-  <y_coord>240</y_coord>
+  <x_coord>240</x_coord>
+  <y_coord>180</y_coord>
 </Display_Point>
