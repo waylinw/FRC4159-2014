@@ -10,10 +10,7 @@ import org.team4159.frc2014.subsystems.DashboardManager;
 
 public class OperatorController extends Controller 
 {
-    private boolean finePressed = false;
-    private boolean fineShooter = false;
-    private double fineShooterBase = 0.0;
-    private double fineShooterLevel = 0.0;
+    
     
 	public OperatorController ()
 	{
@@ -22,7 +19,12 @@ public class OperatorController extends Controller
 	
 	public void tick ()
 	{
-		
+		Drive.instance.correctedDrive(IO.driveStick.getY(), IO.driveStick.getX());
+                boolean shiftDown = IO.driveStick.getRawButton (2);
+		boolean shiftUp = IO.driveStick.getRawButton (3);
+		if (shiftUp ^ shiftDown) Drive.instance.setGearboxPosition (shiftUp);
+                System.out.println("gyro reading: "+IO.drivingGyro.getCorrectedAngle());
+                
                 DashboardManager.instance.update ();
 	}
 }
