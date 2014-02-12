@@ -23,8 +23,10 @@ public class OperatorController extends Controller
                 boolean shiftDown = IO.driveStick.getRawButton (2);
 		boolean shiftUp = IO.driveStick.getRawButton (3);
 		if (shiftUp ^ shiftDown) Drive.instance.setGearboxPosition (shiftUp);
-                System.out.println("gyro reading: "+IO.drivingGyro.getCorrectedAngle());
                 
+                System.out.println("gyro reading: "+IO.drivingGyro.getCorrectedAngle());
+                DriverStationLCD.setLine(2, "Gyro reading:"+IO.drivingGyro.getCorrectedAngle());
+               
                 DashboardManager.instance.update ();
 	}
 }

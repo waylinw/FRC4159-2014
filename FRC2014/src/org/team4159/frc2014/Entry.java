@@ -1,33 +1,24 @@
 package org.team4159.frc2014;
 
 import org.team4159.support.Controller;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import org.team4159.frc2014.controllers.AutonomousController;
 import org.team4159.frc2014.controllers.DisabledController;
 import org.team4159.frc2014.controllers.OperatorController;
-import org.team4159.frc2014.controllers.ResetController;
 import org.team4159.frc2014.controllers.TestController;
-import org.team4159.frc2014.subsystems.DashboardManager;
 import org.team4159.support.ModeEnumerator;
 
 public class Entry extends RobotBase
 {
 	public static final int TICK_INTERVAL_MS = 20;
-	public static final int RETRY_INTERVAL_MS = 500;
-	public static final int RETRY_COUNT = 10;
-	
 	
 	public Entry ()
 	{
-		System.out.println ("Entry initializing ...");
+		System.out.println ("Entry instantiated.");
 		
 		// wake up the IO class
-		IO.class.equals (null);
-		
-		// initialize dashboard manager
-		DashboardManager.class.equals (null);
-		
-		System.out.println ("Entry instantiated.");
+		IO.class.getName ();
 	}
 	
 	private Controller createController (int ct)
@@ -50,68 +41,22 @@ public class Entry extends RobotBase
 	public void startCompetition ()
 	{
 		System.out.println ("Entry.startCompetition() called.");
+                
+                //new ImageSampler ().start ();
 		
 		while (true)
 		{
-			try {
-				new ResetController ().run ();
-			} catch (Throwable t) {
-				System.err.println ("ResetController threw an exception!");
-				t.printStackTrace ();
-			}
-			
 			int mode = ModeEnumerator.getMode();
+			Controller controller = createController (mode);
 			
-			int retries = 0;
-			boolean givenUp = false;
+			System.out.println ("Controller set to " + controller.getClass ().getName ());
 			
-			modeLoop:
-			while (true)
-			{
-				Controller controller = createController (mode);
-				String controllerName = controller.getClass ().getName ();
-				
-				if (!givenUp)
-				{
-					System.out.println ("Starting controller " + controllerName);
-					controller.start ();
-				}
-				
-				while (controller.active ())
-				{
-					sleep (TICK_INTERVAL_MS);
-					
-					if (controller.getError () != null && !givenUp)
-					{
-						if (retries++ < RETRY_COUNT)
-						{
-							System.out.println ("Controller " + controllerName + " crashed, attempting restart ...");
-							sleep (RETRY_INTERVAL_MS);
-							continue modeLoop;
-						}
-						else
-						{
-							System.out.println ("Too many retries to restart " + controllerName +", giving up!");
-							givenUp = true;
-						}
-					}
-				}
-				
-				if (!givenUp)
-				{
-					System.out.println ("Stopping controller " + controllerName);
-					controller.stop ();
-				}
-				
-				break modeLoop;
-			}
+			controller.start ();
+			while (ModeEnumerator.getMode () == mode)
+				try {
+					Thread.sleep (TICK_INTERVAL_MS);
+				} catch (InterruptedException e) {}
+			controller.stop ();
 		}
-	}
-	
-	private void sleep (long x)
-	{
-		try {
-			Thread.sleep (x);
-		} catch (InterruptedException e) {}
 	}
 }

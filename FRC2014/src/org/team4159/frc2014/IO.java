@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
-import edu.wpi.first.wpilibj.HiTechnicColorSensor;
 import org.team4159.frc2014.subsystems.Drive;
 import org.team4159.support.SlidingAverageEncoder;
 import org.team4159.support.CorrectedGyro;
@@ -44,17 +43,17 @@ public class IO
 	 * MOTORS                               *
 	 ****************************************/
         public static final Talon driveMotorLeft = new Talon(1);
-        public static final Talon driveMotorRight = new Talon(2);
-        public static final Talon pickupSpinner = new Talon(3);
-        public static final Talon shooterYAdjust = new Talon(4);
+//        public static final Talon driveMotorRight = new Talon(2);
+//        public static final Talon pickupSpinner = new Talon(3);
+//        public static final Talon shooterYAdjust = new Talon(4);
         
         /****************************************
 	 * RELAYS                               *
 	 ****************************************/
-	public static final Compressor pneumaticPump = new Compressor (1, 1);
-	static {
-		pneumaticPump.start ();
-	}
+//	public static final Compressor pneumaticPump = new Compressor (1, 1);
+//	static {
+//		pneumaticPump.start ();
+//	}
         
         /****************************************
 	 * SOLENOIDS                            *
@@ -63,19 +62,11 @@ public class IO
 	static {
 		driveGearbox.set (Value.kForward);
 	}
-        
-	public static final Solenoid cameraLED = new Solenoid(8);
-        static {
-            cameraLED.set (true);
-        }
          /****************************************
 	 * SENSORS                              *
 	 ****************************************/
-        public static final HiTechnicColorSensor railSensor = new HiTechnicColorSensor(1);
+        //public static final HiTechnicColorSensor railSensor = new HiTechnicColorSensor(1);
         public static final CorrectedGyro drivingGyro = new CorrectedGyro(1);
-        static{
-                drivingGyro.reset();
-        }
         
         
 	private IO () {}
