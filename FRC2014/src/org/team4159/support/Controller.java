@@ -5,6 +5,7 @@
 package org.team4159.support;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import org.team4159.frc2014.Entry;
 
 /**
@@ -26,10 +27,6 @@ public abstract class Controller
 				currentController = Controller.this;
 				Controller.this.run ();
 			} catch (ExitException e) {
-			} catch (Throwable e) {
-				Controller.this.controllerError = e;
-				System.err.println ("Uncaught exception in " + Controller.this.getClass ().getName () + "!");
-				e.printStackTrace ();
 			} finally {
 				currentController = lastController;
 			}
@@ -46,7 +43,6 @@ public abstract class Controller
 	private final ControllerThread controllerThread = new ControllerThread ();
 	private boolean controllerStarted = false;
 	private boolean controllerRunning = false;
-	private Throwable controllerError = null;
 	
 	protected final DriverStation driverStation = DriverStation.getInstance ();
 	
@@ -133,11 +129,6 @@ public abstract class Controller
 			try {
 				controllerThread.join ();
 			} catch (InterruptedException e) {}
-	}
-	
-	public Throwable getError ()
-	{
-		return controllerError;
 	}
 	
 	private void _sleep (long millis)

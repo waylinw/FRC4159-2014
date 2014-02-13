@@ -7,22 +7,24 @@ package org.team4159.frc2014;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.HiTechnicColorSensor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
-import org.team4159.frc2014.subsystems.Drive;
-import org.team4159.support.SlidingAverageEncoder;
-import org.team4159.support.CorrectedGyro;
+import org.team4159.frc2014.subsystems.Pickup;
 
 /**
  *
- * @author waylin
+ * @author Waylin
  */
+
 public class IO
 {
 	// To avoid changes, make sure all declarations are "public static final".
@@ -36,42 +38,80 @@ public class IO
 	 * JOYSTICKS                            *
 	 ****************************************/
 	public static final Joystick driveStick = new Joystick (1);
-	//public static final Joystick joystick2 = new Joystick (2);
-        //public static final Joystick joystick3 = new Joystick (3);
-
-        /****************************************
+	
+	/****************************************
+	 * SENSORS                              *
+	 ****************************************/
+	// 1 Digital I/O is in use by compressor
+        
+        public static final Encoder driveEncoderLeft = new Encoder(2,3);
+        public static final Encoder driveEncoderRight = new Encoder(4,5);
+        static{
+                double pulsesPerRevolution = 360;
+		double revolutionsPerPulse = 1 / pulsesPerRevolution;
+                
+		driveEncoderLeft.setDistancePerPulse (revolutionsPerPulse);
+		driveEncoderRight.setDistancePerPulse (revolutionsPerPulse);
+		driveEncoderLeft.setPIDSourceParameter (PIDSource.PIDSourceParameter.kRate);
+		driveEncoderRight.setPIDSourceParameter (PIDSource.PIDSourceParameter.kRate);
+		driveEncoderLeft.start ();
+		driveEncoderRight.start ();
+        }
+        
+        public static final Encoder pickupEncoder = new Encoder(6,7);
+        static{
+            double pulsesPerRevolution = 360;
+            double revolutionsPerPulse = 1/pulsesPerRevolution;
+            pickupEncoder.setDistancePerPulse(revolutionsPerPulse);
+            pickupEncoder.setPIDSourceParameter(PIDSource.PIDSourceParameter.kRate);
+            pickupEncoder.start();
+        }
+        
+        //Analog
+	public static final Gyro drivingGyro =
+		new Gyro (1);
+        static{   
+            drivingGyro.reset();
+            drivingGyro.setSensitivity(.007);
+        }
+	/****************************************
 	 * MOTORS                               *
 	 ****************************************/
-        public static final Talon driveMotorLeft = new Talon(1);
-//        public static final Talon driveMotorRight = new Talon(2);
-//        public static final Talon pickupSpinner = new Talon(3);
-//        public static final Talon shooterYAdjust = new Talon(4);
-        
+	public static final Talon driveMotorLeft = new Talon (1);
+	public static final Talon driveMotorRight = new Talon (2);
+        public static final Talon pickupMotor = new Talon (3);
+	
         /****************************************
+	 * PID CONTROLLERS                      *
+	 ****************************************/
+	public static final PIDController pickupPID =
+		new PIDController (Pickup.KP, Pickup.KI, Pickup.KD, pickupEncoder, pickupMotor, 1.0 / 50);
+	        
+	/****************************************
 	 * RELAYS                               *
 	 ****************************************/
-//	public static final Compressor pneumaticPump = new Compressor (1, 1);
-//	static {
-//		pneumaticPump.start ();
-//	}
-        
-        /****************************************
+	public static final Compressor pneumaticPump = new Compressor (1, 1);
+	static {
+		pneumaticPump.start ();
+	}
+	
+	/****************************************
 	 * SOLENOIDS                            *
 	 ****************************************/
 	public static final DoubleSolenoid driveGearbox = new DoubleSolenoid (1, 2);
 	static {
 		driveGearbox.set (Value.kForward);
 	}
-         /****************************************
-	 * SENSORS                              *
-	 ****************************************/
-        //public static final HiTechnicColorSensor railSensor = new HiTechnicColorSensor(1);
-        public static final CorrectedGyro drivingGyro = new CorrectedGyro(1);
         
+	public static final Solenoid cameraLED = new Solenoid(8);
+        static {
+            cameraLED.set (true);
+        }
         
+	// private constructor to prevent instantiation
 	private IO () {}
 	
 	static {
 		System.out.println ("IO ready.");
 	}
-    }
+}

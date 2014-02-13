@@ -1,11 +1,20 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package org.team4159.frc2014.subsystems;
 
-import org.team4159.frc2014.controllers.AutonomousController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.ADXL345_I2C;
 import org.team4159.frc2014.IO;
+import org.team4159.frc2014.controllers.AutonomousController;
 
+/**
+ *
+ * @author Waylin
+ */
 public class DashboardManager
 {
 	public static final DashboardManager instance = new DashboardManager ();
@@ -27,5 +36,11 @@ public class DashboardManager
 	}
         public void update ()
         {
+//            SmartDashboard.putBoolean ("Angler Up", Shooter.instance.anglerIsUp ());
+//            SmartDashboard.putNumber ("Shooter Target", IO.shooterPID.getSetpoint());
+//            SmartDashboard.putNumber ("Shooter Actual", Shooter.instance.getSpeed ());
+//            SmartDashboard.putBoolean ("Shoot!", IO.shooterPID.onTarget());
+//            SmartDashboard.putNumber ("Shooter Power", IO.shooterMotor.get());
         }
 }
+
