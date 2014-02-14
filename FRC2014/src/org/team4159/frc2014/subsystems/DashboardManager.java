@@ -36,11 +36,7 @@ public class DashboardManager
 	}
         public void update ()
         {
-//            SmartDashboard.putBoolean ("Angler Up", Shooter.instance.anglerIsUp ());
-//            SmartDashboard.putNumber ("Shooter Target", IO.shooterPID.getSetpoint());
-//            SmartDashboard.putNumber ("Shooter Actual", Shooter.instance.getSpeed ());
-//            SmartDashboard.putBoolean ("Shoot!", IO.shooterPID.onTarget());
-//            SmartDashboard.putNumber ("Shooter Power", IO.shooterMotor.get());
+            
         }
 }
 
