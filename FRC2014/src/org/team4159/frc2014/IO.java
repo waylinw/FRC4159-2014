@@ -101,12 +101,10 @@ public class IO
 	static {
 		driveGearbox.set (Value.kForward);
 	}
-        
-	public static final Solenoid cameraLED = new Solenoid(8);
+        public static final DoubleSolenoid pickupAngler = new DoubleSolenoid (3,4);
         static {
-            cameraLED.set (true);
+                pickupAngler.set(Value.kReverse);
         }
-        
 	// private constructor to prevent instantiation
 	private IO () {}
 	

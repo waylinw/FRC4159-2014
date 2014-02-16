@@ -1,5 +1,6 @@
 package org.team4159.frc2014.subsystems;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.team4159.frc2014.IO;
 import org.team4159.support.Subsystem;
 
@@ -42,5 +43,10 @@ public final class Pickup implements Subsystem
 	{
 		return IO.pickupPID.onTarget ();
 	}
+        
+        public void raiseAngler(boolean temp){
+            IO.pickupAngler.set(temp? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
+        }
+        
         
 }

@@ -9,6 +9,10 @@ import org.team4159.support.ModeEnumerator;
 import org.team4159.support.filters.LowPassFilter;
 import com.sun.squawk.util.Arrays;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.networktables2.type.NumberArray;
+import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
+import org.team4159.frc2014.subsystems.Pickup;
 
 //class ElevatorTest
 //{
@@ -63,19 +67,40 @@ public class OperatorController extends Controller
 	{
 		super (ModeEnumerator.OPERATOR);
 	}
-	
+
+
 	public void tick ()
 	{
 		Drive.instance.correctedDrive(-IO.driveStick.getX()*.7, -IO.driveStick.getY()*.7);
 		
                 DriverStationLCD.setLine(1, "Gyro Angle:"+IO.drivingGyro.getAngle());
-                DriverStationLCD.setLine(2, "Gyro Rate Reading:"+IO.drivingGyro.getRate());
-                DriverStationLCD.setLine(3, "Gyro PID reading:"+IO.drivingGyro.pidGet());
                 
 		boolean shiftDown = IO.driveStick.getRawButton (2);
 		boolean shiftUp = IO.driveStick.getRawButton (3);
 		if (shiftUp ^ shiftDown)
 			Drive.instance.setGearboxPosition (shiftUp);
+                NetworkTable server = NetworkTable.getTable("SmartDashboard");
+                try
+                {
+                    final NumberArray targetNum = new NumberArray();
+                    server.retrieveValue("testla", targetNum);
+                    if (targetNum.size()>0)
+                    {
+			System.out.print(targetNum.get(0));
+			System.out.print(' ');
+			System.out.println(targetNum.get(1));
+                    }
+                }
+                catch (TableKeyNotDefinedException exp)
+                {
+                }
+                
+                if(IO.driveStick.getRawButton(4)){
+                    Pickup.instance.raiseAngler(true);
+                }
+                else if(IO.driveStick.getRawButton(5)){
+                    Pickup.instance.raiseAngler(false);
+                }
 		
 	}
 }

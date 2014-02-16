@@ -36,7 +36,7 @@ public class DashboardManager
 	}
         public void update ()
         {
-            
+            SmartDashboard.putNumber ("Shooter Power", IO.drivingGyro.getAngle());
         }
 }
 
