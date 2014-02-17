@@ -36,7 +36,9 @@ public class DashboardManager
 	}
         public void update ()
         {
-            SmartDashboard.putNumber ("Shooter Power", IO.drivingGyro.getAngle());
+                SmartDashboard.putNumber ("Gyro Angle", IO.drivingGyro.getAngle());
+                SmartDashboard.putBoolean("Pickup Arm Down?", Pickup.instance.getPickupArmStatus());
+                
         }
 }
 

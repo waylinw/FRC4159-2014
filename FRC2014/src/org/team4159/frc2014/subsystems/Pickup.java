@@ -15,6 +15,8 @@ public final class Pickup implements Subsystem
         private static final double MAX_TOLERANCE = 1;
         private double pickupSpeed = Double.NaN;
         
+        private boolean pickupArmStatus = false;
+        
 	private Pickup () 
         {
             IO.pickupPID.setAbsoluteTolerance(MAX_TOLERANCE);
@@ -34,7 +36,7 @@ public final class Pickup implements Subsystem
             }
         }
         
-        public void setMotorOutput(double x)
+        private void setMotorOutput(double x)
         {
             IO.pickupPID.disable();
             IO.pickupMotor.set(x);
@@ -48,5 +50,10 @@ public final class Pickup implements Subsystem
             IO.pickupAngler.set(temp? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
         }
         
-        
+        public boolean getPickupArmStatus(){
+            return pickupArmStatus;
+        }
+        public void setPickupArmStatus(boolean temp){
+            pickupArmStatus = temp;
+        }
 }

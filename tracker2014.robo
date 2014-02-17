@@ -244,3 +244,16 @@ LeftAngle
   <x_coord>240</x_coord>
   <y_coord>180</y_coord>
 </Display_Point>
+<NetworkTables>
+  <delay>20</delay>
+  <filter_type_index>0</filter_type_index>
+  <hostname>10.41.59.2</hostname>
+  <port>1735</port>
+  <prefix>/ImageRecognitionValues</prefix>
+  <variables_to_send>IMAGE_COUNT
+LeftAngle
+LeftDistance
+RightAngle
+RightDistance</variables_to_send>
+  <variable_type_index>2</variable_type_index>
+</NetworkTables>

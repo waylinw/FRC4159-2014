@@ -79,7 +79,7 @@ public class IO
 	public static final Talon driveMotorLeft = new Talon (1);
 	public static final Talon driveMotorRight = new Talon (2);
         public static final Talon pickupMotor = new Talon (3);
-	
+        
         /****************************************
 	 * PID CONTROLLERS                      *
 	 ****************************************/
@@ -89,7 +89,7 @@ public class IO
 	/****************************************
 	 * RELAYS                               *
 	 ****************************************/
-	public static final Compressor pneumaticPump = new Compressor (1, 1);
+	public static final Compressor pneumaticPump = new Compressor (1, 4);
 	static {
 		pneumaticPump.start ();
 	}
@@ -105,6 +105,15 @@ public class IO
         static {
                 pickupAngler.set(Value.kReverse);
         }
+        public static final DoubleSolenoid shooterKicker = new DoubleSolenoid (5,6);
+        static{
+            shooterKicker.set(Value.kReverse);
+        }
+        public static final Solenoid shooterPiston = new Solenoid (7);
+        static{
+            shooterPiston.set(false);
+        }
+        //public static final 
 	// private constructor to prevent instantiation
 	private IO () {}
 	
