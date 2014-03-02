@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import org.team4159.frc2014.subsystems.Pickup;
+import org.team4159.support.CombinedMotor;
 
 /**
  *
@@ -37,6 +38,7 @@ public class IO
 	 * JOYSTICKS                            *
 	 ****************************************/
 	public static final Joystick driveStick = new Joystick (1);
+        public static final Joystick shooterStick = new Joystick (2);
 	
 	/****************************************
 	 * SENSORS                              *
@@ -79,7 +81,9 @@ public class IO
 	public static final Talon driveMotorLeft = new Talon (1);
 	public static final Talon driveMotorRight = new Talon (2);
         public static final Talon pickupMotor = new Talon (3);
-        
+        private static final Talon shooterRaisingLeft = new Talon(4);
+        private static final Talon shooterRaisingRight = new Talon(5);
+        public static final CombinedMotor shooterHeightMotors = new CombinedMotor(shooterRaisingLeft,shooterRaisingRight);
         /****************************************
 	 * PID CONTROLLERS                      *
 	 ****************************************/
@@ -89,7 +93,7 @@ public class IO
 	/****************************************
 	 * RELAYS                               *
 	 ****************************************/
-	public static final Compressor pneumaticPump = new Compressor (1, 4);
+	public static final Compressor pneumaticPump = new Compressor (1, 1);
 	static {
 		pneumaticPump.start ();
 	}
@@ -109,9 +113,9 @@ public class IO
         static{
             shooterKicker.set(Value.kReverse);
         }
-        public static final Solenoid shooterPiston = new Solenoid (7);
+        public static final DoubleSolenoid shooterPiston = new DoubleSolenoid (7,8);
         static{
-            shooterPiston.set(false);
+            shooterPiston.set(Value.kReverse);
         }
         //public static final 
 	// private constructor to prevent instantiation

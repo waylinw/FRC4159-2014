@@ -14,52 +14,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.networktables2.type.NumberArray;
 import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 import org.team4159.frc2014.subsystems.Pickup;
-
-//class ElevatorTest
-//{
-//	private double[] samples = new double[8];
-//	private double[] samplessorted = new double[samples.length];
-//	private int samplei = 0;
-//	
-//	private double maxRate = 0;
-//	
-//	public void tick ()
-//	{
-//		samples[samplei] = IO.elevatorEncoder.getRate ();
-//		samplei = (samplei + 1) % samples.length;
-//		
-//		System.arraycopy (samples, 0, samplessorted, 0, samples.length);
-//		Arrays.sort (samplessorted);
-//		
-//		double medianRate = samplessorted[samples.length / 2];
-//		maxRate = IO.joystick1.getRawButton (2) ?
-//			0 : Math.max (maxRate, Math.abs (medianRate));
-//		
-//		double elevatorOutput = IO.joystick1.getZ ();
-//		IO.elevatorMotor.set (IO.joystick1.getTrigger () ? elevatorOutput : 0);
-//		
-//		DriverStationLCD.setLine (0, "Motor: " + elevatorOutput);
-//		DriverStationLCD.setLine (1, "Encoder: " + maxRate);
-//	}
-//}
-
-//class ShooterTest
-//{
-//    private double[] samplesraw = new double[21];
-//    private double[] samplessorted = new double[samplesraw.length];
-//    private int samplesindex = 0;
-//    
-//    public void tick ()
-//    {
-//        samplesraw[samplesindex++] = IO.shooterEncoder.getRate ();
-//        samplesindex = (samplesindex + 1) % samplesraw.length;
-//        
-//        System.arraycopy (samplesraw, 0, samplessorted, 0, samplesraw.length);
-//        Arrays.sort (samplessorted);
-//        
-//        DriverStationLCD.setLine (1, "ShtMed: " + samplessorted[samplesraw.length / 2]);
-//    }
-//}
+import org.team4159.frc2014.subsystems.Shooter;
 
 public class OperatorController extends Controller 
 {
@@ -80,13 +35,16 @@ public class OperatorController extends Controller
 		boolean shiftUp = IO.driveStick.getRawButton (3);
 		if (shiftUp ^ shiftDown)
 			Drive.instance.setGearboxPosition (shiftUp);
-                NetworkTable server = NetworkTable.getTable("ImageRecognitionValues");
-                try
-                {
-                    System.out.println(server.getNumber("IMAGE_COUNT"));
+                boolean fasterPressed = IO.shooterStick.getRawButton (3);
+                boolean slowerPressed = IO.shooterStick.getRawButton (2);
+                if(fasterPressed){
+                    Shooter.instance.adjustShooterPitch(.3);
                 }
-                catch (TableKeyNotDefinedException exp)
-                {
+                else if(slowerPressed){
+                    Shooter.instance.adjustShooterPitch(-.3);
+                }
+                else{
+                    Shooter.instance.adjustShooterPitch(0);
                 }
                 
                 if(IO.driveStick.getRawButton(4)){
@@ -109,10 +67,10 @@ public class OperatorController extends Controller
                 }
                 
                 if(IO.driveStick.getRawButton(6)){
-                    IO.shooterPiston.set(true);
+                    IO.shooterPiston.set(DoubleSolenoid.Value.kForward);
                 }
                 else if(IO.driveStick.getRawButton(7)){
-                    IO.shooterPiston.set(false);
+                    IO.shooterPiston.set(DoubleSolenoid.Value.kReverse);
                 }
                 else if(IO.driveStick.getRawButton(8)){
                     IO.shooterKicker.set(DoubleSolenoid.Value.kForward);
@@ -121,6 +79,16 @@ public class OperatorController extends Controller
                     IO.shooterKicker.set(DoubleSolenoid.Value.kReverse);
                 }
                 
+                
+                
+                NetworkTable server = NetworkTable.getTable("ImageRecognitionValues");
+                try
+                {
+                    System.out.println(server.getNumber("IMAGE_COUNT"));
+                }
+                catch (TableKeyNotDefinedException exp)
+                {
+                }
                 
 		
 	}
