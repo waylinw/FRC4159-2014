@@ -78,6 +78,8 @@ public class IO
         private static final Talon shooterRaisingLeft = new Talon(4);
         private static final Talon shooterRaisingRight = new Talon(5);
         public static final CombinedMotor shooterHeightMotors = new CombinedMotor(shooterRaisingLeft,shooterRaisingRight);
+        public static final Talon shooterChangeYAngle = new Talon(6);
+        
         /****************************************
 	 * PID CONTROLLERS                      *
 	 ****************************************/

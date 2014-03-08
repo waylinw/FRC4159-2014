@@ -92,6 +92,18 @@ public class OperatorController extends Controller
                     Shooter.instance.adjustShooterPitch(0);
                 }
                 
+                boolean comingLeft = IO.shooterStick.getRawButton (4);
+                boolean comingRight = IO.shooterStick.getRawButton (5);
+                if(comingLeft){
+                    Shooter.instance.adjustShooterYaw(.5);
+                }
+                else if(comingDown){
+                    Shooter.instance.adjustShooterYaw(-.5);
+                }
+                else{
+                    Shooter.instance.adjustShooterYaw(0);
+                }
+                
                 if(IO.shooterStick.getTrigger()){
                     Shooter.instance.fire();
                 }

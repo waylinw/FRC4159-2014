@@ -81,7 +81,7 @@ public class Shooter implements Subsystem {
     }
     
     public void adjustShooterYaw(double pwr){
-        
+        IO.shooterChangeYAngle.set(pwr);
     }
     
 }
