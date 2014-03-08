@@ -19,32 +19,12 @@ public final class Pickup implements Subsystem
         
 	private Pickup () 
         {
-            IO.pickupPID.setAbsoluteTolerance(MAX_TOLERANCE);
-            IO.pickupPID.setOutputRange(-.2, 1.0);
         }
         
-        public void setSpeed(double x, boolean withPID){
-            if(withPID){
-                if(pickupSpeed != x){
-                IO.pickupPID.setSetpoint(pickupSpeed = x);
-                IO.pickupPID.reset();
-                }
-                IO.pickupPID.enable();
-            }
-            else if(!withPID){
-                setMotorOutput(x);
-            }
-        }
-        
-        private void setMotorOutput(double x)
+        public void setMotorOutput(double x)
         {
-            IO.pickupPID.disable();
             IO.pickupMotor.set(x);
         }
-        public boolean pickupIsReady ()
-	{
-		return IO.pickupPID.onTarget ();
-	}
         
         public void raiseAngler(boolean temp){
             IO.pickupAngler.set(temp? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);

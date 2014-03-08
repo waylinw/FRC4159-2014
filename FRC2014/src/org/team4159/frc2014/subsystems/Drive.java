@@ -67,8 +67,4 @@ public final class Drive extends RobotDrive implements Subsystem
                 IO.drivingGyro.reset();
             }
         }
-        
-        public double getWheelsRate(){
-            return Math.abs(IO.driveEncoderLeft.getRate()) > Math.abs(IO.driveEncoderRight.getRate())? Math.abs(IO.driveEncoderLeft.getRate()):Math.abs(IO.driveEncoderRight.getRate());
-        }
 }

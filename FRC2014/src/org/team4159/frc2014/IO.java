@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalModule;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
+import edu.wpi.first.wpilibj.I2C;
 import org.team4159.frc2014.subsystems.Pickup;
 import org.team4159.support.CombinedMotor;
 
@@ -37,8 +39,9 @@ public class IO
 	/****************************************
 	 * JOYSTICKS                            *
 	 ****************************************/
-	public static final Joystick driveStick = new Joystick (1);
-        public static final Joystick shooterStick = new Joystick (2);
+	public static final Joystick driveStickLeft = new Joystick (1);
+        public static final Joystick driveStickRight = new Joystick(2);
+        public static final Joystick shooterStick = new Joystick (3);
 	
 	/****************************************
 	 * SENSORS                              *
@@ -57,15 +60,6 @@ public class IO
 		driveEncoderRight.setPIDSourceParameter (PIDSource.PIDSourceParameter.kRate);
 		driveEncoderLeft.start ();
 		driveEncoderRight.start ();
-        }
-        
-        public static final Encoder pickupEncoder = new Encoder(6,7);
-        static{
-            double pulsesPerRevolution = 360;
-            double revolutionsPerPulse = 1/pulsesPerRevolution;
-            pickupEncoder.setDistancePerPulse(revolutionsPerPulse);
-            pickupEncoder.setPIDSourceParameter(PIDSource.PIDSourceParameter.kRate);
-            pickupEncoder.start();
         }
         
         //Analog
@@ -87,8 +81,6 @@ public class IO
         /****************************************
 	 * PID CONTROLLERS                      *
 	 ****************************************/
-	public static final PIDController pickupPID =
-		new PIDController (Pickup.KP, Pickup.KI, Pickup.KD, pickupEncoder, pickupMotor, 1.0 / 50);
 	        
 	/****************************************
 	 * RELAYS                               *
@@ -103,19 +95,23 @@ public class IO
 	 ****************************************/
 	public static final DoubleSolenoid driveGearbox = new DoubleSolenoid (1, 2);
 	static {
-		driveGearbox.set (Value.kForward);
+		driveGearbox.set (DoubleSolenoid.Value.kForward);
 	}
         public static final DoubleSolenoid pickupAngler = new DoubleSolenoid (3,4);
         static {
-                pickupAngler.set(Value.kReverse);
+                pickupAngler.set(DoubleSolenoid.Value.kReverse);
         }
         public static final DoubleSolenoid shooterKicker = new DoubleSolenoid (5,6);
         static{
-            shooterKicker.set(Value.kReverse);
+            shooterKicker.set(DoubleSolenoid.Value.kReverse);
         }
         public static final DoubleSolenoid shooterPiston = new DoubleSolenoid (7,8);
         static{
-            shooterPiston.set(Value.kReverse);
+            shooterPiston.set(DoubleSolenoid.Value.kForward);
+        }
+        public static final Relay ballClamp = new Relay(2);
+        static{
+            ballClamp.set(Relay.Value.kForward);
         }
         //public static final 
 	// private constructor to prevent instantiation
