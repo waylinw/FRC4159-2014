@@ -20,6 +20,9 @@ public final class Drive extends RobotDrive implements Subsystem
 	{
             //driving on 1 left, 2 right
 		super (IO.driveMotorLeft,IO.driveMotorRight);
+                this.setInvertedMotor(MotorType.kFrontLeft, true);
+                this.setInvertedMotor(MotorType.kFrontRight, false);
+                
 	}
 	
 

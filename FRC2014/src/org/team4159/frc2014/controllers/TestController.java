@@ -17,11 +17,5 @@ public class TestController extends Controller
 		super (ModeEnumerator.TEST);
 	}
         public void tick(){
-            if(IO.driveStick.getRawButton(3))
-                Drive.instance.correctedDrive(.5, 0);
-            else if(IO.driveStick.getRawButton(2))
-                Drive.instance.correctedDrive(-.5, 0);
-            else
-                Drive.instance.correctedDrive(0, 0);
         }
 }

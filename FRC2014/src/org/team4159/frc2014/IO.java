@@ -62,6 +62,8 @@ public class IO
 		driveEncoderRight.start ();
         }
         
+        public static final DigitalInput limitSwitch = new DigitalInput(1);
+        
         //Analog
 	public static final Gyro drivingGyro =
 		new Gyro (1);
@@ -72,8 +74,8 @@ public class IO
 	/****************************************
 	 * MOTORS                               *
 	 ****************************************/
-	public static final Talon driveMotorLeft = new Talon (1);
-	public static final Talon driveMotorRight = new Talon (2);
+	public static final Talon driveMotorLeft = new Talon (2);
+	public static final Talon driveMotorRight = new Talon (1);
         public static final Talon pickupMotor = new Talon (3);
         private static final Talon shooterRaisingLeft = new Talon(4);
         private static final Talon shooterRaisingRight = new Talon(5);
@@ -91,13 +93,17 @@ public class IO
 	static {
 		pneumaticPump.start ();
 	}
+        public static final Relay ballClamp = new Relay(2);
+        static{
+            ballClamp.set(Relay.Value.kForward);
+        }
 	
 	/****************************************
 	 * SOLENOIDS                            *
 	 ****************************************/
 	public static final DoubleSolenoid driveGearbox = new DoubleSolenoid (1, 2);
 	static {
-		driveGearbox.set (DoubleSolenoid.Value.kForward);
+		driveGearbox.set (DoubleSolenoid.Value.kReverse);
 	}
         public static final DoubleSolenoid pickupAngler = new DoubleSolenoid (3,4);
         static {
@@ -111,10 +117,7 @@ public class IO
         static{
             shooterPiston.set(DoubleSolenoid.Value.kForward);
         }
-        public static final Relay ballClamp = new Relay(2);
-        static{
-            ballClamp.set(Relay.Value.kForward);
-        }
+
         //public static final 
 	// private constructor to prevent instantiation
 	private IO () {}

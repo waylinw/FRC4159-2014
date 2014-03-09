@@ -23,32 +23,35 @@ public class AutonomousController extends Controller
 	}
         
         public void run(){
-            toSend[0]='a';
-            ArduinoInterface.instance.lightMode(toSend);
             
             //Lowers pickup
             Pickup.instance.raiseAngler(false);
-            Controller.sleep(500);
             
-            Drive.instance.drive(.3, 0);
-            Shooter.instance.fire();
+            Drive.instance.setSafetyEnabled(false);
+            int i = 1;
+            while(i<2){
+                Drive.instance.drive(.15, 0);
+                Shooter.instance.fire();
             
-            Controller.sleep(3000);
-            Drive.instance.drive(0, 0);
+                Controller.sleep(5000);
+                Drive.instance.setSafetyEnabled(true);
+                Drive.instance.stopMotor();
+                i++;
+            }
             
             
-            	switch (DashboardManager.instance.getAutonomousMode ())
-		{
-			case MODE_LEFT:
-				break;
-			case MODE_RIGHT:
-				break;
-			case MODE_STATIC:
-				break;
-			default:
-				System.out.println ("Invalid autonomous mode!");
-				break;
-		}
+//            	switch (DashboardManager.instance.getAutonomousMode ())
+//		{
+//			case MODE_LEFT:
+//				break;
+//			case MODE_RIGHT:
+//				break;
+//			case MODE_STATIC:
+//				break;
+//			default:
+//				System.out.println ("Invalid autonomous mode!");
+//				break;
+//		}
         }
 	
 }

@@ -8,22 +8,21 @@ package org.team4159.frc2014.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalModule;
 import edu.wpi.first.wpilibj.I2C;
+import org.team4159.frc2014.IO;
 /**
  *
  * @author Waylin
  */
 public class ArduinoInterface {
     public static final ArduinoInterface instance = new ArduinoInterface();
-    DigitalModule module = DigitalModule.getInstance(2);
-    public  I2C arduino = module.getI2C(168);
+    
     
     private ArduinoInterface(){
         
     }
-    public void lightMode(byte[] array){
-        sendData(array);
+    
+    public void writePWM(int output){
+        //IO.arduino.setRaw(output);
     }
-    private void sendData(byte[] array){
-        arduino.transaction(array, 1, null, 0);
-    }
+    
 }

@@ -21,6 +21,8 @@ import org.team4159.frc2014.subsystems.Shooter;
 public class OperatorController extends Controller 
 {
         private byte []toSend = new byte[1]; 
+        public boolean fingerComputerControl = true;
+        
 	public OperatorController ()
 	{
 		super (ModeEnumerator.OPERATOR);
@@ -29,88 +31,90 @@ public class OperatorController extends Controller
 
 	public void tick ()
 	{
-		Drive.instance.tankDrive(IO.driveStickLeft, IO.driveStickRight);
-		
-                DriverStationLCD.setLine(1, "Gyro Angle:"+IO.drivingGyro.getAngle());
+                Drive.instance.setSafetyEnabled(true);
+		Drive.instance.tankDrive(-IO.driveStickLeft.getY(), -IO.driveStickRight.getY());
+                if(fingerComputerControl){
+                    if(!IO.limitSwitch.get()){
+                        Drive.instance.setGearboxPosition(false);
+                        fingerComputerControl=false;
+                    }
+                }
                 
-		boolean shiftDown = IO.driveStickLeft.getRawButton (2) || IO.driveStickRight.getRawButton(2);
-		boolean shiftUp = IO.driveStickLeft.getRawButton (3) || IO.driveStickRight.getRawButton(3);
-		if (shiftUp ^ shiftDown)
-			Drive.instance.setGearboxPosition (shiftUp);
+                
+//		boolean shiftDown = IO.driveStickLeft.getRawButton (2) || IO.driveStickRight.getRawButton(2);
+//		boolean shiftUp = IO.driveStickLeft.getRawButton (3) || IO.driveStickRight.getRawButton(3);
+//		if (shiftUp ^ shiftDown)
+//			Drive.instance.setGearboxPosition (shiftUp);
+                boolean openFinger = IO.shooterStick.getRawButton(4);
+		boolean closeFinger = IO.shooterStick.getRawButton(5);
+		if (openFinger ^ closeFinger){
+			Drive.instance.setGearboxPosition (openFinger);
+                        fingerComputerControl = false;
+                }
 
                 
-                if(IO.driveStickLeft.getRawButton(4) || IO.driveStickRight.getRawButton(4)){
+                if(IO.driveStickRight.getRawButton(4)){
                     Pickup.instance.raiseAngler(true);
                     Pickup.instance.setPickupArmStatus(false);
                 }
-                else if(IO.driveStickLeft.getRawButton(5) || IO.driveStickRight.getRawButton(5)){
+                else if(IO.driveStickRight.getRawButton(5)){
                     Pickup.instance.raiseAngler(false);
                     Pickup.instance.setPickupArmStatus(true);
                 }
                 
-                if(IO.driveStickLeft.getRawButton(11)||IO.driveStickRight.getRawButton(11)){
+                if(IO.driveStickLeft.getRawButton(3)){
                     Pickup.instance.setMotorOutput(.6);
-                    IO.ballClamp.set(Relay.Value.kForward);
                 }
-                else if(IO.driveStickLeft.getTrigger()||IO.driveStickRight.getTrigger()){
+                else if(IO.driveStickRight.getRawButton(1)){
                     Pickup.instance.setMotorOutput(-.8);
-                    IO.ballClamp.set(Relay.Value.kForward);
                 }
                 else{
                     Pickup.instance.setMotorOutput(0);
                     IO.ballClamp.set(Relay.Value.kReverse);
                 }
                 
-//                if(IO.shooterStick.getRawButton(6)){
-//                    IO.shooterPiston.set(DoubleSolenoid.Value.kForward);//Extends piston
-//                }
-//                else if(IO.shooterStick.getRawButton(7)){
-//                    IO.shooterPiston.set(DoubleSolenoid.Value.kReverse);//retracts piston
-//                }
-//                
-//                if(IO.shooterStick.getRawButton(8)){
-//                    IO.shooterKicker.set(DoubleSolenoid.Value.kForward);//kicker up
-//                }
-//                else if(IO.shooterStick.getRawButton(9)){
-//                    IO.shooterKicker.set(DoubleSolenoid.Value.kReverse);//kicker down
-//                }
+                if(IO.shooterStick.getRawButton(6)){
+                    IO.shooterPiston.set(DoubleSolenoid.Value.kForward);//Extends piston
+                    fingerComputerControl = true;
+                }
+                else if(IO.shooterStick.getRawButton(7)){
+                    IO.shooterPiston.set(DoubleSolenoid.Value.kReverse);//retracts piston
+                }
                 
-                boolean comingUp = IO.shooterStick.getRawButton (3);
-                boolean comingDown = IO.shooterStick.getRawButton (2);
-                if(comingUp){
-                    toSend[0]='u';
-                    ArduinoInterface.instance.lightMode(toSend);
+                if(IO.shooterStick.getRawButton(8)){
+                    IO.shooterKicker.set(DoubleSolenoid.Value.kForward);//kicker up
+                    fingerComputerControl = true;
+                }
+                else if(IO.shooterStick.getRawButton(9)){
+                    IO.shooterKicker.set(DoubleSolenoid.Value.kReverse);//kicker down
+                }
+
+                if(IO.shooterStick.getRawButton (3)){
                     Shooter.instance.adjustShooterPitch(.5);
                 }
-                else if(comingDown){
-                    toSend[0]='d';
-                    ArduinoInterface.instance.lightMode(toSend);
+                else if(IO.shooterStick.getRawButton (2)){
                     Shooter.instance.adjustShooterPitch(-.3);
                 }
                 else{
-                    toSend[0]='i';
                     Shooter.instance.adjustShooterPitch(0);
                 }
                 
-                boolean comingLeft = IO.shooterStick.getRawButton (4);
-                boolean comingRight = IO.shooterStick.getRawButton (5);
-                if(comingLeft){
-                    Shooter.instance.adjustShooterYaw(.5);
-                }
-                else if(comingDown){
-                    Shooter.instance.adjustShooterYaw(-.5);
-                }
-                else{
-                    Shooter.instance.adjustShooterYaw(0);
-                }
+//                if(IO.shooterStick.getRawButton (4)){
+//                    Shooter.instance.adjustShooterYaw(.5);
+//                }
+//                else if(IO.shooterStick.getRawButton (5)){
+//                    Shooter.instance.adjustShooterYaw(-.8);
+//                }
+//                else{
+//                    Shooter.instance.adjustShooterYaw(0);
+//                }
                 
-                if(IO.shooterStick.getTrigger()){
-                    Shooter.instance.fire();
-                }
-                else if(IO.shooterStick.getRawButton(5)){
-                    Shooter.instance.hardReset();
-                }
-                
+//                if(IO.shooterStick.getTrigger()){
+//                    Shooter.instance.fire();
+//                }
+//                else if(IO.shooterStick.getRawButton(7)){
+//                    Shooter.instance.hardReset();
+//                }
                 
                 
                 NetworkTable server = NetworkTable.getTable("ImageRecognitionValues");
