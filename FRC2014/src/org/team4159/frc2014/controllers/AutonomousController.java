@@ -1,13 +1,12 @@
 package org.team4159.frc2014.controllers;
 
+import edu.wpi.first.wpilibj.PWM;
 import org.team4159.frc2014.IO;
 import org.team4159.frc2014.subsystems.ArduinoInterface;
-import org.team4159.frc2014.subsystems.DashboardManager;
 import org.team4159.frc2014.subsystems.Drive;
 import org.team4159.frc2014.subsystems.Pickup;
 import org.team4159.frc2014.subsystems.Shooter;
 import org.team4159.support.Controller;
-import org.team4159.support.DriverStationLCD;
 import org.team4159.support.ModeEnumerator;
 
 public class AutonomousController extends Controller 
@@ -27,10 +26,12 @@ public class AutonomousController extends Controller
             //Lowers pickup
             Pickup.instance.raiseAngler(false);
             
+            ArduinoInterface.instance.setLightState(2);
+            
             Drive.instance.setSafetyEnabled(false);
             int i = 1;
             while(i<2){
-                Drive.instance.drive(.15, 0);
+                Drive.instance.drive(.4, 0);
                 Shooter.instance.fire();
             
                 Controller.sleep(5000);

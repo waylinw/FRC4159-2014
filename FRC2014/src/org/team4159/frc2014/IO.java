@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.PWM;
 import org.team4159.frc2014.subsystems.Pickup;
 import org.team4159.support.CombinedMotor;
 
@@ -62,7 +63,7 @@ public class IO
 		driveEncoderRight.start ();
         }
         
-        public static final DigitalInput limitSwitch = new DigitalInput(1);
+        public static final DigitalInput limitSwitch = new DigitalInput(6);
         
         //Analog
 	public static final Gyro drivingGyro =

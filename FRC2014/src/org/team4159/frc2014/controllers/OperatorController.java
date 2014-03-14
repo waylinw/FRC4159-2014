@@ -22,24 +22,33 @@ public class OperatorController extends Controller
 {
         private byte []toSend = new byte[1]; 
         public boolean fingerComputerControl = true;
+        boolean changeArmLightPressed = false;
+        boolean chargePistonPressed = false;
+        boolean shootPistonPressed = false;
+        boolean pickupPressed = false;
+        boolean endGame = false;
+        long timer = 0;
         
 	public OperatorController ()
 	{
 		super (ModeEnumerator.OPERATOR);
 	}
 
-
+        public void run(){
+            timer = System.currentTimeMillis();
+            super.run();
+        }
 	public void tick ()
 	{
                 Drive.instance.setSafetyEnabled(true);
 		Drive.instance.tankDrive(-IO.driveStickLeft.getY(), -IO.driveStickRight.getY());
                 if(fingerComputerControl){
                     if(!IO.limitSwitch.get()){
-                        Drive.instance.setGearboxPosition(false);
+                        Drive.instance.setGearboxPosition (false);
+                        System.out.println(IO.limitSwitch.get());
                         fingerComputerControl=false;
                     }
                 }
-                
                 
 //		boolean shiftDown = IO.driveStickLeft.getRawButton (2) || IO.driveStickRight.getRawButton(2);
 //		boolean shiftUp = IO.driveStickLeft.getRawButton (3) || IO.driveStickRight.getRawButton(3);
@@ -49,7 +58,7 @@ public class OperatorController extends Controller
 		boolean closeFinger = IO.shooterStick.getRawButton(5);
 		if (openFinger ^ closeFinger){
 			Drive.instance.setGearboxPosition (openFinger);
-                        fingerComputerControl = false;
+                        fingerComputerControl = openFinger;
                 }
 
                 
@@ -63,10 +72,24 @@ public class OperatorController extends Controller
                 }
                 
                 if(IO.driveStickLeft.getRawButton(3)){
+                    if(!pickupPressed){
+                        ArduinoInterface.instance.setLightState(ArduinoInterface.PICKUP_SPINNING);
+                        pickupPressed = true;
+                        shootPistonPressed = false;
+                        chargePistonPressed = false;
+                        changeArmLightPressed = false;
+                    }
                     Pickup.instance.setMotorOutput(.6);
                 }
-                else if(IO.driveStickRight.getRawButton(1)){
-                    Pickup.instance.setMotorOutput(-.8);
+                else if(IO.driveStickRight.getTrigger()){
+                    if(!pickupPressed){
+                        ArduinoInterface.instance.setLightState(ArduinoInterface.PICKUP_SPINNING);
+                        pickupPressed = true;
+                        shootPistonPressed = false;
+                        chargePistonPressed = false;
+                        changeArmLightPressed = false;
+                    }
+                    Pickup.instance.setMotorOutput(-.5);
                 }
                 else{
                     Pickup.instance.setMotorOutput(0);
@@ -74,28 +97,71 @@ public class OperatorController extends Controller
                 }
                 
                 if(IO.shooterStick.getRawButton(6)){
+                    if(!chargePistonPressed){
+                        ArduinoInterface.instance.setLightState(ArduinoInterface.CHARGE_PISTON);
+                        pickupPressed = false;
+                        shootPistonPressed = false;
+                        chargePistonPressed = true;
+                        changeArmLightPressed = false;
+                    }
                     IO.shooterPiston.set(DoubleSolenoid.Value.kForward);//Extends piston
                     fingerComputerControl = true;
                 }
                 else if(IO.shooterStick.getRawButton(7)){
+                    if(chargePistonPressed){
+                        ArduinoInterface.instance.setLightState(ArduinoInterface.IDLE);
+                        pickupPressed = false;
+                        shootPistonPressed = true;
+                        chargePistonPressed = false;
+                        changeArmLightPressed = false;
+                    }
                     IO.shooterPiston.set(DoubleSolenoid.Value.kReverse);//retracts piston
                 }
                 
-                if(IO.shooterStick.getRawButton(8)){
+                if(IO.shooterStick.getTrigger()){
+                    if(!shootPistonPressed){
+                        ArduinoInterface.instance.setLightState(ArduinoInterface.SHOOT);
+                        pickupPressed = false;
+                        shootPistonPressed = true;
+                        chargePistonPressed = false;
+                        changeArmLightPressed = false;
+                    }
                     IO.shooterKicker.set(DoubleSolenoid.Value.kForward);//kicker up
                     fingerComputerControl = true;
                 }
                 else if(IO.shooterStick.getRawButton(9)){
+                    if(shootPistonPressed){
+                        ArduinoInterface.instance.setLightState(ArduinoInterface.IDLE);
+                        pickupPressed = false;
+                        shootPistonPressed = false;
+                        chargePistonPressed = false;
+                        changeArmLightPressed = false;
+                    }
                     IO.shooterKicker.set(DoubleSolenoid.Value.kReverse);//kicker down
                 }
 
                 if(IO.shooterStick.getRawButton (3)){
+                    if(!changeArmLightPressed){
+                        ArduinoInterface.instance.setLightState(ArduinoInterface.RAISING_ARM);
+                        pickupPressed = false;
+                        shootPistonPressed = false;
+                        chargePistonPressed = true;
+                        changeArmLightPressed = true;
+                    }
                     Shooter.instance.adjustShooterPitch(.5);
                 }
                 else if(IO.shooterStick.getRawButton (2)){
+                    if(chargePistonPressed){
+                        ArduinoInterface.instance.setLightState(ArduinoInterface.LOWERING_ARM);
+                        pickupPressed = false;
+                        shootPistonPressed = false;
+                        chargePistonPressed = false;
+                        changeArmLightPressed = false;
+                    }
                     Shooter.instance.adjustShooterPitch(-.3);
                 }
                 else{
+                    
                     Shooter.instance.adjustShooterPitch(0);
                 }
                 
@@ -115,6 +181,12 @@ public class OperatorController extends Controller
 //                else if(IO.shooterStick.getRawButton(7)){
 //                    Shooter.instance.hardReset();
 //                }
+                if(!endGame){
+                    if(System.currentTimeMillis()-timer>90000){
+                        ArduinoInterface.instance.setLightState(9);
+                        endGame = true;
+                    }
+                }
                 
                 
                 NetworkTable server = NetworkTable.getTable("ImageRecognitionValues");
