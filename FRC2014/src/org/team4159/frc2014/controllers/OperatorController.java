@@ -54,8 +54,8 @@ public class OperatorController extends Controller
 //		boolean shiftUp = IO.driveStickLeft.getRawButton (3) || IO.driveStickRight.getRawButton(3);
 //		if (shiftUp ^ shiftDown)
 //			Drive.instance.setGearboxPosition (shiftUp);
-                boolean openFinger = IO.shooterStick.getRawButton(4);
-		boolean closeFinger = IO.shooterStick.getRawButton(5);
+                boolean openFinger = IO.driveStickLeft.getRawButton(4);
+		boolean closeFinger = IO.driveStickLeft.getRawButton(5);
 		if (openFinger ^ closeFinger){
 			Drive.instance.setGearboxPosition (openFinger);
                         fingerComputerControl = openFinger;
@@ -79,7 +79,7 @@ public class OperatorController extends Controller
                         chargePistonPressed = false;
                         changeArmLightPressed = false;
                     }
-                    Pickup.instance.setMotorOutput(.6);
+                    Pickup.instance.setMotorOutput(-.6);
                 }
                 else if(IO.driveStickRight.getTrigger()){
                     if(!pickupPressed){
@@ -89,7 +89,7 @@ public class OperatorController extends Controller
                         chargePistonPressed = false;
                         changeArmLightPressed = false;
                     }
-                    Pickup.instance.setMotorOutput(-.5);
+                    Pickup.instance.setMotorOutput(.4);
                 }
                 else{
                     Pickup.instance.setMotorOutput(0);
