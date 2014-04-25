@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalModule;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
@@ -78,10 +77,6 @@ public class IO
 	public static final Talon driveMotorLeft = new Talon (2);
 	public static final Talon driveMotorRight = new Talon (1);
         public static final Talon pickupMotor = new Talon (3);
-        private static final Talon shooterRaisingLeft = new Talon(4);
-        private static final Talon shooterRaisingRight = new Talon(5);
-        public static final CombinedMotor shooterHeightMotors = new CombinedMotor(shooterRaisingLeft,shooterRaisingRight);
-        public static final Talon shooterChangeYAngle = new Talon(6);
         
         /****************************************
 	 * PID CONTROLLERS                      *
@@ -94,10 +89,6 @@ public class IO
 	static {
 		pneumaticPump.start ();
 	}
-        public static final Relay ballClamp = new Relay(2);
-        static{
-            ballClamp.set(Relay.Value.kForward);
-        }
 	
 	/****************************************
 	 * SOLENOIDS                            *
@@ -108,15 +99,11 @@ public class IO
 	}
         public static final DoubleSolenoid pickupAngler = new DoubleSolenoid (3,4);
         static {
-                pickupAngler.set(DoubleSolenoid.Value.kReverse);
+                pickupAngler.set(DoubleSolenoid.Value.kForward);
         }
-        public static final DoubleSolenoid shooterKicker = new DoubleSolenoid (5,6);
+        public static final DoubleSolenoid pickupAnglerLeft = new DoubleSolenoid(5,6);
         static{
-            shooterKicker.set(DoubleSolenoid.Value.kReverse);
-        }
-        public static final DoubleSolenoid shooterPiston = new DoubleSolenoid (7,8);
-        static{
-            shooterPiston.set(DoubleSolenoid.Value.kForward);
+            pickupAngler.set(DoubleSolenoid.Value.kForward);
         }
 
         //public static final 

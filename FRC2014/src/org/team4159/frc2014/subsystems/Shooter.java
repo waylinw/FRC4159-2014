@@ -26,54 +26,25 @@ public class Shooter implements Subsystem {
         
     }
     public boolean chargeUpForShooting(){
-        if(IO.shooterPiston.get()==DoubleSolenoid.Value.kForward){
-            return true;
-        }
-        else{
-            IO.shooterPiston.set(DoubleSolenoid.Value.kForward);
-        }
         return true;
     }
     
     public void getReadyToFire(){
-        IO.shooterKicker.set(DoubleSolenoid.Value.kReverse);
-        Controller.sleep(200);
-        IO.shooterPiston.set(DoubleSolenoid.Value.kForward);
     }
     
     public void fire(){
-        IO.driveGearbox.set(DoubleSolenoid.Value.kForward);
-        IO.shooterKicker.set(DoubleSolenoid.Value.kForward);
-        reset();
     }
     
     public void reset(){
-        IO.shooterPiston.set(DoubleSolenoid.Value.kReverse);
-        Controller.sleep(2000);
-        IO.shooterKicker.set(DoubleSolenoid.Value.kReverse);
-        Controller.sleep(700);
-        IO.shooterPiston.set(DoubleSolenoid.Value.kForward);
-        Controller.sleep(10000);
     }
     
     public void hardReset(){
-//        toSend[0]='w';
-//        ArduinoInterface.instance.lightMode(toSend);
-        IO.shooterPiston.set(DoubleSolenoid.Value.kForward);
-        IO.shooterKicker.set(DoubleSolenoid.Value.kForward);
-        IO.shooterPiston.set(DoubleSolenoid.Value.kReverse);
-        Controller.sleep(2000);
-        IO.shooterKicker.set(DoubleSolenoid.Value.kReverse);
-        Controller.sleep(400);
-        reset();
     }
     
         public void adjustShooterPitch (double pwr){
-        IO.shooterHeightMotors.set(pwr);
     }
     
     public void adjustShooterYaw(double pwr){
-        IO.shooterChangeYAngle.set(pwr);
     }
     
 }

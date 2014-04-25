@@ -24,9 +24,9 @@ public class DashboardManager
 	private DashboardManager ()
 	{
 		SendableChooser autonomousMode = new SendableChooser ();
-		autonomousMode.addObject ("Left", new Integer (AutonomousController.MODE_LEFT));
-		autonomousMode.addObject ("Right", new Integer (AutonomousController.MODE_RIGHT));
-		autonomousMode.addObject ("Static", new Integer (AutonomousController.MODE_STATIC));
+		autonomousMode.addObject ("Low Goal Auto", new Integer (AutonomousController.LOW_GOAL_AUTO));
+		autonomousMode.addObject ("Drive Only Auto", new Integer (AutonomousController.DRIVE_ONLY));
+		autonomousMode.addObject ("No Drive Auto", new Integer (AutonomousController.STAY_PUT_AUTO));
 		SmartDashboard.putData ("Autonomous Mode", autonomousMode);
 	}
 	

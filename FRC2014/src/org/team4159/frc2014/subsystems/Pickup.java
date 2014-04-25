@@ -27,7 +27,8 @@ public final class Pickup implements Subsystem
         }
         
         public void raiseAngler(boolean temp){
-            IO.pickupAngler.set(temp? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
+            IO.pickupAngler.set(temp? DoubleSolenoid.Value.kReverse: DoubleSolenoid.Value.kForward);
+            IO.pickupAnglerLeft.set(temp? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
         }
         
         public boolean getPickupArmStatus(){
