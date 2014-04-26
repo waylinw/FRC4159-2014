@@ -19,13 +19,13 @@ public class DashboardManager
 {
 	public static final DashboardManager instance = new DashboardManager ();
 
-	private SendableChooser autonomousMode;
+	private SendableChooser autonomousMode = new SendableChooser();
 	
 	private DashboardManager ()
 	{
-		SendableChooser autonomousMode = new SendableChooser ();
-		autonomousMode.addObject ("Low Goal Auto", new Integer (AutonomousController.LOW_GOAL_AUTO));
-		autonomousMode.addObject ("Drive Only Auto", new Integer (AutonomousController.DRIVE_ONLY));
+		autonomousMode.addObject ("Low Goal Blind Auto", new Integer (AutonomousController.LOW_GOAL_BLIND_AUTO));
+		autonomousMode.addObject("Low Goal Detection Auto", new Integer(AutonomousController.LOW_GOAL_DETECTION_AUTO));
+                autonomousMode.addObject ("Drive Only Auto", new Integer (AutonomousController.DRIVE_ONLY));
 		autonomousMode.addObject ("No Drive Auto", new Integer (AutonomousController.STAY_PUT_AUTO));
 		SmartDashboard.putData ("Autonomous Mode", autonomousMode);
 	}
@@ -34,6 +34,10 @@ public class DashboardManager
 	{
 		return ((Integer) autonomousMode.getSelected ()).intValue ();
 	}
+        public boolean shootReady(){
+             double temp = SmartDashboard.getNumber("BLOB_COUNT", 0);
+             return temp > 0;
+        }
         public void update ()
         {
                 SmartDashboard.putNumber ("Gyro Angle", IO.drivingGyro.getAngle());

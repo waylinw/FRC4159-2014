@@ -103,7 +103,7 @@ public class IO
         }
         public static final DoubleSolenoid pickupAnglerLeft = new DoubleSolenoid(5,6);
         static{
-            pickupAngler.set(DoubleSolenoid.Value.kForward);
+                pickupAnglerLeft.set(DoubleSolenoid.Value.kReverse);
         }
 
         //public static final 

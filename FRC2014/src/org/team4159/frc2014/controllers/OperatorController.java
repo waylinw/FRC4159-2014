@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.networktables2.type.NumberArray;
 import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 import org.team4159.frc2014.subsystems.ArduinoInterface;
+import org.team4159.frc2014.subsystems.DashboardManager;
 import org.team4159.frc2014.subsystems.Pickup;
 import org.team4159.frc2014.subsystems.Shooter;
 
@@ -50,9 +51,11 @@ public class OperatorController extends Controller
 
                 
                 if(IO.shooterStick.getRawButton(4)){
+                    //lower
                     Pickup.instance.raiseAngler(true);
                 }
                 else if(IO.shooterStick.getRawButton(5)){
+                    //raise
                     Pickup.instance.raiseAngler(false);
                 }
                 
@@ -65,17 +68,6 @@ public class OperatorController extends Controller
                 else{
                     IO.pickupMotor.set(0);
                 }
-                
-                
-                NetworkTable server = NetworkTable.getTable("ImageRecognitionValues");
-                try
-                {
-                    System.out.println(server.getNumber("IMAGE_COUNT"));
-                }
-                catch (TableKeyNotDefinedException exp)
-                {
-                }
-                
-		
+
 	}
 }

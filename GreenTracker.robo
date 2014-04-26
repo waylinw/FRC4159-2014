@@ -1,0 +1,54 @@
+<head><version>2.61.0</version></head>
+<RGB_Filter>
+  <channel>2</channel>
+  <hue_value>60</hue_value>
+  <max_value>30</max_value>
+  <min_value>80</min_value>
+  <result_type>1</result_type>
+</RGB_Filter>
+<Blob_Size>
+  <cutoff>30</cutoff>
+  <limit>1</limit>
+  <mask>FALSE</mask>
+  <min_area>550</min_area>
+  <object_size>10</object_size>
+  <threshold>80</threshold>
+  <treat_as_color_image>FALSE</treat_as_color_image>
+</Blob_Size>
+<Blob_Count/>
+<Center_of_Gravity>
+  <box_size>9</box_size>
+  <color_index>2</color_index>
+  <connect_line>FALSE</connect_line>
+  <density>-1</density>
+  <display_as_annotation>TRUE</display_as_annotation>
+  <overlay_image>Source</overlay_image>
+  <show_box>TRUE</show_box>
+  <show_cog>TRUE</show_cog>
+  <show_coord>TRUE</show_coord>
+  <threshold>-1</threshold>
+  <use_subpixel>FALSE</use_subpixel>
+</Center_of_Gravity>
+<VBScript_Program>
+  <script>SetVariable "SERVO_VALUE", Cint((GetVariable("COG_X") * 255)/GetVariable("IMAGE_WIDTH"))</script>
+  <source_mode>gui</source_mode>
+</VBScript_Program>
+<Display_Variables>
+  <border_color>red</border_color>
+  <dim_background>TRUE</dim_background>
+  <display_as_annotation>FALSE</display_as_annotation>
+  <display_value_only>FALSE</display_value_only>
+  <font_color>white</font_color>
+  <font_size>Normal (10pt)</font_size>
+  <northwest>BLOB_COUNT
+</northwest>
+</Display_Variables>
+<NetworkTables>
+  <delay>100</delay>
+  <filter_type_index>0</filter_type_index>
+  <hostname>10.41.59.2</hostname>
+  <port>1735</port>
+  <prefix>/SmartDashboard/</prefix>
+  <variables_to_send>BLOB_COUNT</variables_to_send>
+  <variable_type_index>2</variable_type_index>
+</NetworkTables>
